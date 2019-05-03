@@ -5,7 +5,7 @@ const app = express()
 app.use(express.json())
 app.use(express.static('./dist'))
 
-app.listen(1234, err => {
+app.listen(3000, err => {
   err ? console.log(err.message) : console.log('Server ready')
 })
 

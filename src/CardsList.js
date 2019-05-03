@@ -1,6 +1,7 @@
 export class CardsList {
-  constructor(cards) {
-    this.cards = cards
-    console.log(cards)
+  constructor({ title, description, category }) {
+    this.title = title
+    this.description = description
+    console.log('Title:', this.title)
   }
 }
