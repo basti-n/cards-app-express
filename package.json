@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon server.js",
+    "server": "nodemon -w server.js server.js",
     "parcel": "parcel src/index.html",
     "start": "run-p parcel server"
   },

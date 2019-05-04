@@ -12,17 +12,25 @@ export class Form {
   render() {
     //Create All element
     const title = createEl({ target: this.target, type: 'input' })
-    const text = createEl({ target: this.target, type: 'textarea' })
+    const description = createEl({ target: this.target, type: 'textarea' })
+    const category = createEl({ target: this.target, type: 'select' })
     const button = createEl({ target: this.target, type: 'button' })
 
     // Inner HTML
     button.innerHTML = 'Click Me'
+    category.innerHTML = `
+      <option value="school">School</option>
+      <option value="sports">Sports</option>
+      <option value="household">Household</option>`
+
     title.name = 'title'
-    text.name = 'text'
+    description.name = 'description'
+    category.name = 'category'
 
     // Append button and textarea
     this.el.appendChild(title)
-    this.el.appendChild(text)
+    this.el.appendChild(description)
+    this.el.appendChild(category)
     this.el.appendChild(button)
 
     //
@@ -38,8 +46,8 @@ export class Form {
   handleSubmit(event, el) {
     event.preventDefault()
     console.log('Handle Submit', el)
-    const { title, text } = el
-    console.log(title.value, text.value)
-    this.postNewCard(title.value, text.value)
+    const { title, description, category } = el
+    console.log(title.value, description.value, category.value)
+    this.postNewCard(title.value, description.value, category.value)
   }
 }

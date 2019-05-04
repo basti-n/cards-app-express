@@ -6,36 +6,31 @@ export class App {
   el = get('#app')
 
   constructor() {
-    this.cards = [
-      {
-        title: 'DummyTitle',
-        description: 'DummyDescription',
-        category: 'DummyCategory'
-      }
-    ]
+    this.cards = []
     this.form = new Form(this.el, this.postNewCard)
-    console.log(this.cards)
     this.list = new CardsList(this.cards)
   }
 
-  postNewCard(title, text) {
+  updateCards() {}
+
+  postNewCard(title, description, category) {
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        title: title,
-        text: text
+        title,
+        description,
+        category
       })
     }
     fetch('/cards', options)
       .then(res => res.json())
       .then(data => {
         this.cards = data
-        console.log(data)
 
-        console.log(this.cards)
+        console.log('After Fetch: ', this.cards)
       })
       .catch(err => console.log('ERROR:' + err))
   }

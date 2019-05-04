@@ -1,6 +1,7 @@
 const express = require('express')
 const fs = require('fs')
 const app = express()
+let id = 0
 
 app.use(express.json())
 app.use(express.static('./dist'))
@@ -14,7 +15,8 @@ let cards = fs.readFile(__dirname + '/cards.json', (err, data) => {
     console.log(err.message)
     return {}
   }
-  cards = JSON.parse(data)
+  const toText = data.toString()
+  cards = toText.length ? JSON.parse(data) : null
   return cards
 })
 
@@ -24,13 +26,21 @@ app.get('/cards', (req, res) => {
     if (err) {
       console.log(err.message)
       return [
-        { title: 'some title', text: 'some text', bookmarked: false, id: 1 },
-        { title: 'Number two', text: 'some text', bookmarked: false, id: 2 },
-        { title: 'Title 3', text: 'some text', bookmarked: false, id: 3 }
+        {
+          title: 'some title',
+          description: 'some text',
+          category: 'school',
+          bookmarked: false,
+          id: 1
+        }
       ]
     }
-    cards = JSON.parse(data)
-    res.json(cards)
+    try {
+      cards = JSON.parse(data)
+      res.json(cards)
+    } catch (error) {
+      res.send('Sorry no todos')
+    }
   })
 })
 
@@ -42,7 +52,8 @@ app.get('/cards/:id', (req, res) => {
       console.log(err.message)
       return
     }
-    const cards = JSON.parse(data)
+    const toText = data.toString()
+    cards = toText.length ? JSON.parse(data) : null
     const searchedForCard = cards.find(card => card.id === Number(id))
     res.json(searchedForCard)
   })
@@ -50,9 +61,14 @@ app.get('/cards/:id', (req, res) => {
 
 //POST /cards → adds a card to cards
 app.post('/cards', (req, res) => {
-  const id = cards.length + 1
+  id++
   const card = { ...req.body, id, bookmarked: false }
-  cards = [...cards, card]
+
+  if (isIterable(cards)) {
+    cards = [...cards, card]
+  } else {
+    cards = cards !== null ? [cards, card] : [card]
+  }
   updateCards(cards)
   res.json(cards)
 })
@@ -63,7 +79,7 @@ app.delete('/cards/:id', (req, res) => {
   const cardToDelete = cards.find(card => card.id === Number(id))
   cards.splice(cards.indexOf(cardToDelete), 1)
   updateCards(cards)
-  res.send(`User with id: ${id} succesfully deleted`)
+  res.send(`User with id: ${id} succesfully deleted. Congrats!`)
 })
 
 function updateCards(cards) {
@@ -75,6 +91,9 @@ function updateCards(cards) {
     console.log('Successful User Update')
   })
 }
+
+const isIterable = object =>
+  object != null && typeof object[Symbol.iterator] === 'function'
 
 /*
 
