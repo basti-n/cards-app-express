@@ -1,10 +1,10 @@
 import { Card } from './Card'
 
 export class CardsList {
-  constructor(cards) {
+  constructor(cards, deleteCard, updateCard) {
     this.cards = cards
-    this.onDelete = onDelete
-    this.onEdit = onEdit
+    this.deleteCard = deleteCard
+    this.updateCard = updateCard
     this.createCards()
   }
 
@@ -17,6 +17,6 @@ export class CardsList {
   }
 
   createSingleCard(card, id) {
-    new Card(card, id)
+    new Card(card, id, this.deleteCard, this.updateCard)
   }
 }

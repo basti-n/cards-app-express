@@ -26,7 +26,7 @@ export class Form {
       <option value="household">Household</option>`
 
     title.name = 'title'
-    title.placeholder = 'What would you like to do?'
+    title.placeholder = 'ToDo title'
     description.name = 'description'
     description.placeholder = 'Describe your ToDo'
     category.name = 'category'

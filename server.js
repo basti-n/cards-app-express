@@ -61,10 +61,11 @@ app.get('/cards/:id', (req, res) => {
 
 app.patch('/cards/:id', (req, res) => {
   const id = req.params.id
-  const { title: newTitle } = req.body
+  const { title: newTitle, description: newDescription } = req.body
 
   const editedCard = cards.find(card => card.id === Number(id))
   editedCard.title = newTitle
+  editedCard.description = newDescription
 
   updateCards(cards, () => res.send('Changes are saved!'))
 })

@@ -20,14 +20,40 @@ export class App {
 
   createViews() {
     this.form = new Form(this.postNewCard)
-    this.list = new CardsList(this.cards)
+    this.list = new CardsList(
+      this.cards,
+      this.deleteCard,
+      this.updateEditedCard
+    )
   }
 
   // Delete Cards
-  deleteCard() {}
+  deleteCard(idToDelete) {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+    fetch(`/cards/${idToDelete}`, options)
+      .then(res => res.json())
+      .catch(err => console.log(err.message))
+  }
 
-  // for Patch (=> Callback in Cardslist)
-  updateEditedCard() {}
+  // Edit Card
+  updateEditedCard(id, title, description) {
+    const options = {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title: title.textContent,
+        description: description.textContent
+      })
+    }
+    fetch(`/cards/${id}`, options)
+  }
 
   postNewCard = card => {
     const { title, description, category } = card

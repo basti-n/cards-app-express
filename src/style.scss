@@ -4,26 +4,29 @@
 }
 
 body {
+  height: 100vh;
   background: papayawhip;
   margin: 0;
+  padding: 40px 5vw 30px 5vw;
 }
 
 #app {
-  padding: 25px 5%;
   display: grid;
-  grid-template-rows: 1fr 2fr;
+  grid-template-rows: 200px 2fr;
   grid-template-areas:
     'form'
     'cards';
   gap: 30px;
-  height: 100vh;
+  height: 100%;
 }
 
 form {
   grid-area: form;
   display: grid;
-  grid-template-areas: repeat(200px, 4);
-  grid-gap: 25px;
+  grid-template-rows: repeat(80px, 2);
+  grid-template-columns: 160px 100px 1fr;
+  gap: 15px;
+  align-items: space-around;
   justify-content: center;
   & > * {
     display: block;
@@ -38,7 +41,14 @@ form {
   input {
     padding: 15px;
   }
+  & > input {
+    grid-column: 1 / 2;
+  }
+  & > textarea {
+    grid-column: 2 / -1;
+  }
   & > button {
+    grid-column: 2 / -1;
     background: #66b2b2;
     font-weight: bolder;
     border: 1px solid black;

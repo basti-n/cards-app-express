@@ -7,11 +7,14 @@ import { get } from './utils'
 export class Card {
   cardContainer = get('.cards')
 
-  constructor({ title, description, category }, id) {
+  constructor({ title, description, category }, id, deleteCard, updateCard) {
     this.id = id
     this.title = title
     this.description = description
     this.category = category
+    this.deleteCard = deleteCard
+    this.updateCard = updateCard
+
     this.createCard()
   }
 
@@ -38,55 +41,42 @@ export class Card {
 
   onEdit(newCard) {
     const editButton = get('.cards__edit')
-    const saveButton = newCard.querySelector('.cards__save')
-    const title = newCard.querySelector('.cards__heading')
+    const saveButton = get('.cards__save', newCard)
+    const title = get('.cards__heading', newCard)
+    const description = get('.cards__text', newCard)
 
-    editButton.addEventListener('click', event => {
-      this.handleEdit(editButton, saveButton, title)
+    editButton.addEventListener('click', () => {
+      this.handleEdit(editButton, saveButton, title, description)
     })
 
     saveButton.addEventListener('click', () => {
       const id = event.target.dataset.id
-      this.saveEdit(id, editButton, saveButton, title)
+      this.saveEdit(id, editButton, saveButton, title, description)
     })
   }
 
-  handleEdit(editButton, saveButton, title) {
+  handleEdit(editButton, saveButton, title, description) {
     editButton.classList.toggle('hidden')
     saveButton.classList.toggle('hidden')
     title.setAttribute('contentEditable', 'true')
+    description.setAttribute('contentEditable', 'true')
+    title.focus()
   }
 
-  saveEdit(idOfSavedCard, editButton, saveButton, title) {
+  saveEdit(idOfSavedCard, editButton, saveButton, title, description) {
     editButton.classList.toggle('hidden')
     saveButton.classList.toggle('hidden')
     title.setAttribute('contentEditable', 'false')
+    description.setAttribute('contentEditable', 'false')
 
-    const options = {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        title: title.textContent
-      })
-    }
-    fetch(`/cards/${idOfSavedCard}`, options).then(res => console.log(res))
+    this.updateCard(idOfSavedCard, title, description)
   }
 
   handleDelete() {
-    const options = {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
     get('.cards__close').addEventListener('click', event => {
-      console.log('Delete Iteam', event.target.parentNode)
-      fetch(`/cards/${event.target.dataset.id}`, options)
-        .then(res => res.json())
-        .then(data => this.fadeoutDeletedItem(event.target.parentNode))
-        .catch(err => console.log(err.message))
+      const cardToDelete = event.target.parentNode
+      this.deleteCard(cardToDelete.dataset.id)
+      this.fadeoutDeletedItem(cardToDelete)
     })
   }
 
