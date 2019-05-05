@@ -86,7 +86,8 @@ article {
   font-style: italic;
 }
 
-.cards__edit {
+.cards__edit,
+.cards__save {
   position: absolute;
   font-size: 1.4em;
   cursor: pointer;
@@ -147,4 +148,8 @@ article {
 .fadeout {
   transition: all 1s ease-out;
   opacity: 0;
+}
+
+.hidden {
+  display: none;
 }

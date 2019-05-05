@@ -57,6 +57,18 @@ app.get('/cards/:id', (req, res) => {
   })
 })
 
+//Patch Cards /:id
+
+app.patch('/cards/:id', (req, res) => {
+  const id = req.params.id
+  const { title: newTitle } = req.body
+
+  const editedCard = cards.find(card => card.id === Number(id))
+  editedCard.title = newTitle
+
+  updateCards(cards, () => res.send('Changes are saved!'))
+})
+
 //POST /cards
 app.post('/cards', (req, res) => {
   const id =

@@ -23,7 +23,11 @@ export class App {
     this.list = new CardsList(this.cards)
   }
 
-  updateCards() {}
+  // Delete Cards
+  deleteCard() {}
+
+  // for Patch (=> Callback in Cardslist)
+  updateEditedCard() {}
 
   postNewCard = card => {
     const { title, description, category } = card

@@ -26,26 +26,54 @@ export class Card {
     <p class="cards__text">${this.description}</p>
     <p class="cards__category">${this.category}</p>
     <div data-id=${this.id} class="cards__edit">✎</div>
+    <div data-id=${this.id} class="cards__save hidden">&#128190;</div>
     <div data-id=${this.id} class="cards__close"></div>
     `
 
-    this.handleEdit(newCard)
+    this.onEdit(newCard)
     this.handleDelete(newCard)
 
     return newCard
   }
 
-  handleEdit(newCard) {
+  onEdit(newCard) {
     const editButton = get('.cards__edit')
-    editButton.addEventListener('click', event =>
-      console.log(
-        'Edit Button Clicked',
-        event.target.dataset.id,
-        'New Card: ',
-        newCard
-      )
-    )
+    const saveButton = newCard.querySelector('.cards__save')
+    const title = newCard.querySelector('.cards__heading')
+
+    editButton.addEventListener('click', event => {
+      this.handleEdit(editButton, saveButton, title)
+    })
+
+    saveButton.addEventListener('click', () => {
+      const id = event.target.dataset.id
+      this.saveEdit(id, editButton, saveButton, title)
+    })
   }
+
+  handleEdit(editButton, saveButton, title) {
+    editButton.classList.toggle('hidden')
+    saveButton.classList.toggle('hidden')
+    title.setAttribute('contentEditable', 'true')
+  }
+
+  saveEdit(idOfSavedCard, editButton, saveButton, title) {
+    editButton.classList.toggle('hidden')
+    saveButton.classList.toggle('hidden')
+    title.setAttribute('contentEditable', 'false')
+
+    const options = {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title: title.textContent
+      })
+    }
+    fetch(`/cards/${idOfSavedCard}`, options).then(res => console.log(res))
+  }
+
   handleDelete() {
     const options = {
       method: 'DELETE',

@@ -3,6 +3,8 @@ import { Card } from './Card'
 export class CardsList {
   constructor(cards) {
     this.cards = cards
+    this.onDelete = onDelete
+    this.onEdit = onEdit
     this.createCards()
   }
 
@@ -10,7 +12,6 @@ export class CardsList {
     this.cards &&
       this.cards.forEach(card => {
         const { id, ...restOfCard } = card
-        console.log('This is an ID', card)
         this.createSingleCard(restOfCard, id)
       })
   }
