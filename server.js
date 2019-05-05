@@ -13,11 +13,9 @@ app.listen(3000, err => {
 let cards = fs.readFile(__dirname + '/cards.json', (err, data) => {
   if (err) {
     console.log(err.message)
-    return {}
   }
   const toText = data.toString()
   cards = toText.length ? JSON.parse(data) : null
-  return cards
 })
 
 // GET Cards
@@ -27,8 +25,8 @@ app.get('/cards', (req, res) => {
       console.log(err.message)
       return [
         {
-          title: 'some title',
-          description: 'some text',
+          title: 'Placeholder Title',
+          description: 'Placeholder Text',
           category: 'school',
           bookmarked: false,
           id: 1
@@ -39,7 +37,7 @@ app.get('/cards', (req, res) => {
       cards = JSON.parse(data)
       res.json(cards)
     } catch (error) {
-      res.send('Sorry no todos')
+      res.send('Sorry, no cards exist.')
     }
   })
 })
@@ -59,9 +57,15 @@ app.get('/cards/:id', (req, res) => {
   })
 })
 
-//POST /cards → adds a card to cards
+//POST /cards
 app.post('/cards', (req, res) => {
-  id++
+  const id =
+    cards.length > 0
+      ? cards
+          .map(card => card.id)
+          .reduce((acc, curr) => (acc >= curr ? acc : curr)) + 1
+      : 1
+
   const card = { ...req.body, id, bookmarked: false }
 
   if (isIterable(cards)) {
@@ -69,8 +73,7 @@ app.post('/cards', (req, res) => {
   } else {
     cards = cards !== null ? [cards, card] : [card]
   }
-  updateCards(cards)
-  res.json(cards)
+  updateCards(cards, () => res.json(card))
 })
 
 //DELETE /cards/:id → removes a card from cards
@@ -78,33 +81,21 @@ app.delete('/cards/:id', (req, res) => {
   const { id } = req.params
   const cardToDelete = cards.find(card => card.id === Number(id))
   cards.splice(cards.indexOf(cardToDelete), 1)
-  updateCards(cards)
-  res.send(`User with id: ${id} succesfully deleted. Congrats!`)
+
+  updateCards(cards, () => res.send(cards))
+  //res.send(`User with id: ${id} succesfully deleted. Congrats!`)
 })
 
-function updateCards(cards) {
+function updateCards(cards, sendResponse) {
   fs.writeFile(__dirname + '/cards.json', JSON.stringify(cards), err => {
     if (err) {
       console.log(err.message)
       return
     }
+    sendResponse()
     console.log('Successful User Update')
   })
 }
 
 const isIterable = object =>
   object != null && typeof object[Symbol.iterator] === 'function'
-
-/*
-
-const listInitial = [
-  { title: 'some title', text: 'some text', bookmarked: false, id: 1 },
-  { title: 'Number two', text: 'some text', bookmarked: false, id: 2 },
-  { title: 'Title 3', text: 'some text', bookmarked: false, id: 3 }
-]
-
-fs.writeFile(__dirname + '/cards.json', JSON.stringify(cards), err => {
-  err ? console.log(err) : console.log('Cards Updated')
-})
-
-*/

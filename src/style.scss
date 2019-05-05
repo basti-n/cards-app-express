@@ -1,0 +1,150 @@
+* {
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+body {
+  background: papayawhip;
+  margin: 0;
+}
+
+#app {
+  padding: 25px 5%;
+  display: grid;
+  grid-template-rows: 1fr 2fr;
+  grid-template-areas:
+    'form'
+    'cards';
+  gap: 30px;
+  height: 100vh;
+}
+
+form {
+  grid-area: form;
+  display: grid;
+  grid-template-areas: repeat(200px, 4);
+  grid-gap: 25px;
+  justify-content: center;
+  & > * {
+    display: block;
+    appearance: none;
+    border: none;
+    border-radius: 10px;
+    background: #f2f2f2;
+    box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.3);
+    height: 60px;
+  }
+  & > textarea,
+  input {
+    padding: 15px;
+  }
+  & > button {
+    background: #66b2b2;
+    font-weight: bolder;
+    border: 1px solid black;
+    &:hover {
+      transform: scale(1.03);
+    }
+  }
+}
+
+.cards {
+  overflow-y: scroll;
+  grid-area: cards;
+  display: flex;
+  justify-content: start;
+  flex-flow: column;
+}
+
+article {
+  position: relative;
+  width: 100%;
+  align-items: center;
+  display: grid;
+  text-align: center;
+  grid-template-areas: repeat(50px, 3);
+  border: 1px solid #66b2b2;
+  border-radius: 10px 30px;
+  margin-bottom: 10px;
+}
+
+.cards__heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  background: #66b2b2;
+  border-radius: 10px 30px;
+  height: 100%;
+}
+
+.cards__text {
+  font-size: 0.9em;
+}
+
+.cards__category {
+  font-style: italic;
+}
+
+.cards__edit {
+  position: absolute;
+  font-size: 1.4em;
+  cursor: pointer;
+  left: 15px;
+  top: 10px;
+  width: 30px;
+  height: 30px;
+  transition: color 0.3s ease;
+  &:hover {
+    color: white;
+  }
+}
+
+.cards__close {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 5px;
+  right: 10px;
+  background: lightsalmon;
+  width: 40px;
+  height: 40px;
+  border-radius: 90%;
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    height: 3px;
+    width: 50%;
+    background: white;
+    transition: transform 0.5s ease-in;
+  }
+  &::before {
+    top: 50%;
+    right: 10px;
+    transform: rotate(45deg);
+  }
+  &::after {
+    top: 50%;
+    right: 10px;
+    transform: rotate(135deg);
+  }
+  &:hover {
+    &::before,
+    &::after {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.floatingLabel {
+  font-size: 0.8em;
+  position: absolute;
+  top: 195px;
+}
+
+.fadeout {
+  transition: all 1s ease-out;
+  opacity: 0;
+}

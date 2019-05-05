@@ -1,53 +1,53 @@
 import { createEl } from './utils'
+import { get } from './utils'
 
 export class Form {
-  constructor(target, postNewCard) {
-    this.target = target
+  form = get('.form')
+
+  constructor(postNewCard) {
     this.postNewCard = postNewCard
-    this.el = createEl({ target, type: 'form' })
     this.render()
     this.addEventListener()
   }
 
   render() {
     //Create All element
-    const title = createEl({ target: this.target, type: 'input' })
-    const description = createEl({ target: this.target, type: 'textarea' })
-    const category = createEl({ target: this.target, type: 'select' })
-    const button = createEl({ target: this.target, type: 'button' })
+    const title = createEl({ target: this.form, type: 'input' })
+    const description = createEl({ target: this.form, type: 'textarea' })
+    const category = createEl({ target: this.form, type: 'select' })
+    const button = createEl({ target: this.form, type: 'button' })
 
     // Inner HTML
     button.innerHTML = 'Click Me'
     category.innerHTML = `
+      <option value="" hidden>Select your category</option>
       <option value="school">School</option>
       <option value="sports">Sports</option>
       <option value="household">Household</option>`
 
     title.name = 'title'
+    title.placeholder = 'What would you like to do?'
     description.name = 'description'
+    description.placeholder = 'Describe your ToDo'
     category.name = 'category'
-
-    // Append button and textarea
-    this.el.appendChild(title)
-    this.el.appendChild(description)
-    this.el.appendChild(category)
-    this.el.appendChild(button)
-
-    //
-    this.target.appendChild(this.el)
+    category.required = true
   }
 
   addEventListener() {
-    this.el.addEventListener('submit', event =>
-      this.handleSubmit(event, this.el)
+    this.form.addEventListener('submit', event =>
+      this.handleSubmit(event, this.form)
     )
   }
 
   handleSubmit(event, el) {
     event.preventDefault()
-    console.log('Handle Submit', el)
     const { title, description, category } = el
-    console.log(title.value, description.value, category.value)
-    this.postNewCard(title.value, description.value, category.value)
+    const newCard = {
+      title: title.value,
+      description: description.value,
+      category: category.value
+    }
+    this.postNewCard(newCard)
+    this.form.reset()
   }
 }

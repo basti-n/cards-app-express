@@ -1,19 +1,32 @@
 import { Form } from './Form'
-import { get } from './utils'
 import { CardsList } from './Cardslist'
+import { get } from './utils'
 
 export class App {
   el = get('#app')
 
   constructor() {
-    this.cards = []
-    this.form = new Form(this.el, this.postNewCard)
+    fetch('/cards')
+      .then(res => res.json())
+      .then(data => {
+        this.cards = data
+        this.createViews()
+      })
+      .catch(err => {
+        this.createViews()
+        console.log('Error: ', err)
+      })
+  }
+
+  createViews() {
+    this.form = new Form(this.postNewCard)
     this.list = new CardsList(this.cards)
   }
 
   updateCards() {}
 
-  postNewCard(title, description, category) {
+  postNewCard = card => {
+    const { title, description, category } = card
     const options = {
       method: 'POST',
       headers: {
@@ -28,10 +41,10 @@ export class App {
     fetch('/cards', options)
       .then(res => res.json())
       .then(data => {
-        this.cards = data
+        const { id } = data
 
-        console.log('After Fetch: ', this.cards)
+        this.list.createSingleCard(card, id)
       })
-      .catch(err => console.log('ERROR:' + err))
+      .catch(err => console.log('Error: ' + err.message))
   }
 }
