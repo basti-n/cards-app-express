@@ -25,7 +25,7 @@ form {
   display: grid;
   grid-template-rows: repeat(80px, 2);
   grid-template-columns: 160px 100px 1fr;
-  gap: 15px;
+  grid-column-gap: 25px;
   align-items: space-around;
   justify-content: center;
   & > * {
@@ -53,7 +53,7 @@ form {
     font-weight: bolder;
     border: 1px solid black;
     &:hover {
-      transform: scale(1.03);
+      transform: scale(1.01);
     }
   }
 }

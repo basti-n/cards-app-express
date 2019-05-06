@@ -55,6 +55,7 @@ export class App {
     fetch(`/cards/${id}`, options)
   }
 
+  // Create new card
   postNewCard = card => {
     const { title, description, category } = card
     const options = {

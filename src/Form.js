@@ -18,9 +18,9 @@ export class Form {
     const button = createEl({ target: this.form, type: 'button' })
 
     // Inner HTML
-    button.innerHTML = 'Click Me'
+    button.innerHTML = 'Add new card'
     category.innerHTML = `
-      <option value="" hidden>Select your category</option>
+      <option value="" hidden>Select category</option>
       <option value="school">School</option>
       <option value="sports">Sports</option>
       <option value="household">Household</option>`
